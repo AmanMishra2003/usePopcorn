@@ -1,0 +1,42 @@
+Component Categories
+three Categories
+1. Stateless / presentational Components
+2. Statefull Components
+3. Structural Components
+
+**---Component Composition---** Technique to combine different component using children prop
+as we studied we can put component inside a component 
+
+************
+<model/>
+inside model
+function model(){
+    return (
+        <succes/>
+    )
+}
+***********
+
+In this form it creates a problem where we cannot easily use model component and success component is tightly bind to the model component
+
+We can refactor this into a model resusable and diff component
+
+************
+inside model
+function model({children}){
+    return (
+        {children}
+    )
+}
+
+<model>
+    <success/>
+</model>
+***********
+
+now using success component as a child of model component we can reuse model component more easily.
+
+Problem solve by Component Composition
+1. Solve Prop drilling problem
+2. Create hightly reusable and flexible component
+
