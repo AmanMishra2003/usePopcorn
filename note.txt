@@ -40,3 +40,25 @@ Problem solve by Component Composition
 1. Solve Prop drilling problem
 2. Create hightly reusable and flexible component
 
+React also allow developer to pass an element as a props
+
+*******************
+<model element={<success/>} />
+
+function model({element}){
+    return (
+        {element}
+    )
+}
+*******************
+
+CleanUp function 
+1. Function that we can return from the effect. (optional)
+
+2. Runs on two different ocassions
+    - before the effect is executed again
+    - after the component has unmounted
+
+Race condition 
+suppose u r fetching some data from a api and sending request whenever use type some data .... if one of the many request took longer duration to fetch data then
+it might be a case where we don't get the desired data from the api and the request that took longer time gets complete and store data in the state.

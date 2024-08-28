@@ -10,9 +10,7 @@ function Box({children }) {
             {
                 showBox
                 &&
-                <>
-                    {children}
-                </>
+                children
             }
         </div>
     )

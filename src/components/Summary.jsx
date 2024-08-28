@@ -1,15 +1,19 @@
 const averageFunction = (arr)=>{
-    return arr.reduce((acc,curr,i,arr)=>(
-        (acc+curr)/arr.length
+    if(!arr){
+        return
+    }
+    const total = arr.reduce((acc,curr,i,arr)=>(
+        acc+curr
     ),0)
+    return (total/(arr.length)).toFixed(2)
 }
 
 
 function Summary({data}) {
-    const moviesCount = data.length;
-    const avgRating = averageFunction(data.map(ele=> ele.imdbRating)) ;
+    const moviesCount = data.length || 0;
+    const avgRating = averageFunction(data.map(ele=> Number(ele.imdbRating))) ;
     const userRating = averageFunction(data.map(ele=> ele.userRating)) ;
-    const totalHour = data.map(ele=> ele.runtime).reduce((acc,curr)=>acc+curr)
+    const totalHour = data.map(ele=> Number(ele.Runtime.split(' ')[0])).reduce((acc,curr)=>acc+curr,0)
 
     return (
         <div className="summary">
@@ -17,19 +21,19 @@ function Summary({data}) {
                     <div>
                     <p>
                         <span>#️⃣</span>
-                        <span>{moviesCount} movies</span>
+                        <span>{moviesCount || 0} movies</span>
                     </p>
                     <p>
                         <span>⭐️</span>
-                        <span>{avgRating}</span>
+                        <span>{avgRating || 0}</span>
                     </p>
                     <p>
                         <span>🌟</span>
-                        <span>{userRating}</span>
+                        <span>{userRating || 0}</span>
                     </p>
                     <p>
                         <span>⏳</span>
-                        <span>{totalHour} min</span>
+                        <span>{totalHour}</span>
                     </p>
             </div>
         </div>

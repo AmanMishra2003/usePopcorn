@@ -1,11 +1,18 @@
 import Button from "./Button"
 
-function MovieList({data, showDetails}) {
+function MovieList({data, showDetails,getId,deleteMovies}) {
+    const handleDeleteMoviesFromWatchList = (id)=>{
+        deleteMovies(currData=>(
+            currData.filter(ele=>(
+                ele.imdbID!==id
+            ))
+        ))
+    }
     return (
         <div>
             <ul className="list">
                 {data?.map((movie) => (
-                    <li key={movie.imdbID}>
+                    <li key={movie.imdbID} onClick={()=>{getId(movie.imdbID)}}>
                     <img src={movie.Poster} alt={`${movie.Title} poster`} />
                     <h3>{movie.Title}</h3>
                     <div>
@@ -24,9 +31,9 @@ function MovieList({data, showDetails}) {
                                 </p>
                                 <p>
                                     <span>⏳</span>
-                                    <span>{movie.runtime} min</span>
+                                    <span>{movie.Runtime}</span>
                                 </p>
-                                <Button className="btn-delete">X</Button>
+                                <Button className="btn-delete" onClick={()=>handleDeleteMoviesFromWatchList(movie.imdbID)}>X</Button>
                                 </>
                             ):
                             (
