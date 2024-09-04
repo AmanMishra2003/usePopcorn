@@ -62,3 +62,70 @@ CleanUp function
 Race condition 
 suppose u r fetching some data from a api and sending request whenever use type some data .... if one of the many request took longer duration to fetch data then
 it might be a case where we don't get the desired data from the api and the request that took longer time gets complete and store data in the state.
+
+whenever intial data of the state is derived from a function it is called lazy evalution
+**********************
+example:
+
+const [data, setData] = useState(function(){
+    return Math.floor(Math.random())
+})
+
+*********************
+function must be a pure function and called only on intial render
+
+Ref with useRef (preserving a reference which is consistance in multiple render)
+"Box" object with mutable .current property that is persistance across renders("normal variables are always reset).
+
+Two big use cases:
+    1. Creating a variable that stay the same between renders (e.g. previous state , setTimeoutId etc)
+    2. selecting and storing DOM.
+
+Refs are for the data that is Not rendered: usually appear in event handlers or effects, not in JSX (otherwise use useState)
+
+State and ref both are persitent across renders but state update data after re-render and ref doesnot update data after re-render
+
+State :
+    1. immutable
+    2. update asynchronously
+
+Ref :
+    1. mutable
+    2. update synchronously
+
+We do not use useRef in jsx because it doesnot trigger a rerender when updated therefore eventhough the value will change it will not show on the UI.
+
+Custom hook
+
+When to use?
+In react you can either reuse UI or logic
+UI --> Component
+Logic --> 
+    1. If your logic does not required hooks 
+        U need a normal function
+    2. If your logic does require hooks
+        U need a custom hook
+
+1. Allow us to reuse non visual logic in multiple component
+2. One custom hook should have one purpose to make it reusable and portable (even across multiple projects)
+3. Rules of hooks apply to custom hooks too.
+
+function useFetch(url){
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(()=>{
+        fetch(url).then((data)=>{
+            return data.json();
+        }).then((res)=>{
+            return res;
+        })
+    },[])
+
+    return [data, isLoading]
+}
+
+rules:
+1. function name need to start with use (u need to give name which start with use otherwise react will not know )
+2. function needs to use one or more hooks
+3. unlike component can recieve and return any relevant data

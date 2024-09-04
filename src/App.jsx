@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import {tempMovieData, tempWatchedData} from './assets/data'
+import { useMovies } from './hooks/useMovies';
+import { useLocalStorage } from './hooks/useLocalStorage';
+// import {tempMovieData, tempWatchedData} from './assets/data'
 import Navbar from './components/Navbar';
 import Main from './components/Main';
 import Box from './components/Box';
@@ -12,68 +14,26 @@ import Loader from './components/Loader';
 import ErrorMessage from './components/ErrorMessage';
 import SelectedMovieDetailsComponent from './components/SelectedMovieDetailsComponent';
 
-const API_KEY='f27a037f'
-const id='tt3896198'
 
-document.title = `usePopcorn`
+// document.title = `usePopcorn`
 
 
 function App() {
-  const [searchMovieData, setSearchMovieData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [watchedMovieData, setwatchedMovieData] = useState([]);
-  const [error, setError] = useState()
+ 
+  
   const [query,setQuery] = useState('');
   const [selectedId, setSelectedId] = useState('');
-console.log(watchedMovieData)
+  const [watchedMovieData, setwatchedMovieData] = useLocalStorage([],'watched')
+  const  {
+    searchMovieData,
+    loading,
+    error
+  } =  useMovies(query, ()=>setSelectedId(''))
+
   const getId = (id)=>{
-    console.log(id)
     setSelectedId(id)
   }
 
-  useEffect(()=>{
-    const controller = new AbortController();
-    const dataFetchFunction = async function(){
-      try{
-
-        setLoading(true)
-        setError('')
-        const fetchData = await fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${query}`,
-          {signal : controller.signal}
-        );
-
-        if(!fetchData.ok){
-          throw new Error('Something went wrong!!')
-        } 
-
-        const res = await fetchData.json();
-
-        if(res.Response==='False'){
-          throw new Error('No movie found!')
-        } 
-
-        setSearchMovieData(res.Search); // Return an empty array if res.Search is undefined
-
-      }catch(err){
-        if(err.name!=="AbortError"){
-          setError(err.message)
-        }
-      }finally{
-        setLoading(false)
-      }
-
-    }
-    if(query.length<3){
-      setSearchMovieData([])
-      setError('')
-      return
-    }
-    dataFetchFunction()
-
-    return ()=>{
-      controller.abort()
-    }
-  },[query])
 
   return (
     <>

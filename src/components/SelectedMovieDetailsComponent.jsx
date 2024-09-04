@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import StarRating from "./StarRating";
 import Loader from "./Loader";
 import Button from "./Button";
+import { useKey } from "../hooks/useKey";
 
 function SelectedMovieDetailsComponent({id,removeId,setwatchedMovieData,watchedMovieData}) {
     const [data, setData] = useState({})
@@ -11,6 +12,12 @@ function SelectedMovieDetailsComponent({id,removeId,setwatchedMovieData,watchedM
     const isWatched = watchedMovieData.map((ele)=>ele.imdbID).includes(id)
     const userRating = watchedMovieData.find((ele)=>ele.imdbID===id)?.userRating;
 
+    const countRatingChange = useRef(0);
+
+    useEffect(function(){
+        if(rating) ++countRatingChange.current;
+        console.log(countRatingChange)
+    },[rating])
 
     const handleAddToListData = ()=>{
         const {imdbID,Title,Year, Poster,Runtime, imdbRating} = data;
@@ -26,19 +33,8 @@ function SelectedMovieDetailsComponent({id,removeId,setwatchedMovieData,watchedM
         removeId('')
     }
 
-    useEffect(()=>{
-        function callback(e){
-            if(e.code==='Escape'){
-                removeId()
-            }
-        }
-
-        document.addEventListener('keydown', callback)
-
-        return ()=>{
-            document.removeEventListener('keydown', callback)
-        }
-    })
+    useKey('escape', removeId )
+    
 
     useEffect(()=>{
         async function fetchDataFunc() {
@@ -67,6 +63,8 @@ function SelectedMovieDetailsComponent({id,removeId,setwatchedMovieData,watchedM
             document.title = "usePopcorn"
         }
     },[data.Title])
+
+
 
     return (
         <div className="details">
